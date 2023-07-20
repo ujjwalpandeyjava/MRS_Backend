@@ -8,8 +8,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping(value = "/")
+@RequestMapping(value = { "/", "" })
 public class ActualMasterController {
+
 	@GetMapping
 	@PostMapping
 	public ResponseEntity<String> atRoot() {
