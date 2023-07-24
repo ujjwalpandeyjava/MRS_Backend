@@ -27,13 +27,6 @@ public class MovieController {
 		return new ResponseEntity<List<Movie>>(movieServiceInter.allMovies(), HttpStatus.OK);
 	}
 
-	@GetMapping(value = "/nameContaining")
-	public ResponseEntity<List<Movie>> getAllMoviescontaingName(@RequestParam("nameContaining") String nameContaining) {
-		System.out.println("Name containing: " + nameContaining);
-		return new ResponseEntity<List<Movie>>(movieServiceInter.findAllMovieByNameContaining(nameContaining),
-				HttpStatus.OK);
-	}
-
 	@GetMapping(value = "/movieId")
 	public ResponseEntity<Optional<Movie>> getOneMovieById(@RequestParam("movieId") ObjectId movieId) {
 		System.out.println("One movie with movie ObjectId: " + movieId.toString());
@@ -42,8 +35,13 @@ public class MovieController {
 
 	@GetMapping(value = "/imdbID")
 	public ResponseEntity<Optional<Movie>> getMovieByImdbID(@RequestParam("imdbID") String imdbID) {
-		System.out.println("One movie with movie Imdb: " + imdbID);
 		return new ResponseEntity<Optional<Movie>>(movieServiceInter.getOneMovieByImdbId(imdbID), HttpStatus.OK);
+	}
+
+	@GetMapping(value = "/nameContaining")
+	public ResponseEntity<List<Movie>> getAllMoviescontaingName(@RequestParam("nameContaining") String nameContaining) {
+		return new ResponseEntity<List<Movie>>(movieServiceInter.findAllMovieByNameContaining(nameContaining),
+				HttpStatus.OK);
 	}
 
 }

@@ -12,10 +12,11 @@ import pandey.ujjwal.MovierReviewer.pojo.Movie;
 
 @Repository
 public interface MovieRepository extends MongoRepository<Movie, ObjectId> {
-	@Query("{'name': { $regex: ?0, $options: 'i' }}")
+	@Query("{'title': { $regex: ?0, $options: 'i' }}")
 	List<Movie> findAllMovieByNameContaining(String name);
 
 	/*
+	 Auto Queries with properties name, (no need of @Query())
 	 @Query: indicates that the method will use a custom query for data retrieval
 	 "{'imdbId': ?0}"MongoDB query expression itself
 	 ?0: parameter number
