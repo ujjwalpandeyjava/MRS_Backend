@@ -12,6 +12,7 @@
 	<groupId>pandey.ujjwal</groupId>
 	<artifactId>MovierReviewer</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
+	<packaging>war</packaging>
 	<name>MovierReviewer</name>
 	<description>Full-Stack project with: Mongo, Java 17, SpringBoot3, NextJS,
 		etc. (JAR)</description>
@@ -27,7 +28,11 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
-
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-tomcat</artifactId>
+			<scope>provided</scope>
+		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-devtools</artifactId>
@@ -64,6 +69,7 @@
 				</configuration>
 			</plugin>
 		</plugins>
+		<finalName>${artifactId}</finalName>
 	</build>
 
 </project>
