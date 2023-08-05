@@ -10,9 +10,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping(value = { "/", "" })
-@CrossOrigin(origins = { "http://localhost:8080"})
+@CrossOrigin(origins = { "http://localhost:3000", "http://localhost:8080" })
 public class ActualMasterController {
-
 	@GetMapping
 	@PostMapping
 	public ResponseEntity<String> atRoot() {

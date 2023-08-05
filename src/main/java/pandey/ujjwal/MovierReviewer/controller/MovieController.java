@@ -18,7 +18,7 @@ import pandey.ujjwal.MovierReviewer.service.MovieService;
 
 @RestController
 @RequestMapping(value = "/api/v1/movies")
-@CrossOrigin(origins = { "http://localhost:8080" })
+@CrossOrigin(origins = { "http://localhost:3000", "http://localhost:8080" })
 public class MovieController {
 
 	@Autowired
@@ -37,6 +37,7 @@ public class MovieController {
 
 	@GetMapping(value = "/imdbID")
 	public ResponseEntity<Optional<Movie>> getMovieByImdbID(@RequestParam("imdbID") String imdbID) {
+		System.out.println("Imdb id: " + imdbID);
 		return new ResponseEntity<Optional<Movie>>(movieServiceInter.getOneMovieByImdbId(imdbID), HttpStatus.OK);
 	}
 

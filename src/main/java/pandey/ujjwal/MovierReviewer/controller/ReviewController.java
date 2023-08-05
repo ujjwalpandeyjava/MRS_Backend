@@ -20,7 +20,7 @@ import pandey.ujjwal.MovierReviewer.service.ReviewService;
 */
 @RestController
 @RequestMapping(value = "/api/v1/reviews")
-@CrossOrigin(origins = { "http://localhost:8080" })
+@CrossOrigin(origins = { "http://localhost:3000", "http://localhost:8080" })
 public class ReviewController {
 
 	@Autowired
