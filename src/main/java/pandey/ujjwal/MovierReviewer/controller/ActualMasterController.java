@@ -15,8 +15,7 @@ public class ActualMasterController {
 	@GetMapping
 	@PostMapping
 	public ResponseEntity<String> atRoot() {
-		String respose = "Maste URI.";
-		return new ResponseEntity<String>(respose, HttpStatus.OK);
+		return new ResponseEntity<String>("Maste URI", HttpStatus.OK);
 	}
 
 }

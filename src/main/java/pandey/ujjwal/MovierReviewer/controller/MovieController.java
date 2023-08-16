@@ -9,9 +9,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import pandey.ujjwal.MovierReviewer.pojo.Movie;
 import pandey.ujjwal.MovierReviewer.service.MovieService;
@@ -25,19 +28,23 @@ public class MovieController {
 	private MovieService movieServiceInter;
 
 	@GetMapping
+	public ResponseEntity<List<Movie>> findFirstXMoviesAfterSkippingYMovies(@RequestBody ObjectNode jsonObj) {
+		return new ResponseEntity<List<Movie>>(movieServiceInter.findFirstXMoviesAfterSkippingYMovies(jsonObj),
+				HttpStatus.OK);
+	}
+
+	@GetMapping(value = "/allMovies")
 	public ResponseEntity<List<Movie>> getAllMovies() {
 		return new ResponseEntity<List<Movie>>(movieServiceInter.allMovies(), HttpStatus.OK);
 	}
 
 	@GetMapping(value = "/movieId")
 	public ResponseEntity<Optional<Movie>> getOneMovieById(@RequestParam("movieId") ObjectId movieId) {
-		System.out.println("One movie with movie ObjectId: " + movieId.toString());
 		return new ResponseEntity<Optional<Movie>>(movieServiceInter.getOneMovieById(movieId), HttpStatus.OK);
 	}
 
 	@GetMapping(value = "/imdbID")
 	public ResponseEntity<Optional<Movie>> getMovieByImdbID(@RequestParam("imdbID") String imdbID) {
-		System.out.println("Imdb id: " + imdbID);
 		return new ResponseEntity<Optional<Movie>>(movieServiceInter.getOneMovieByImdbId(imdbID), HttpStatus.OK);
 	}
 

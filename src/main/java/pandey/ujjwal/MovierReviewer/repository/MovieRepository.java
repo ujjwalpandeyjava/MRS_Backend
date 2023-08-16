@@ -23,5 +23,7 @@ public interface MovieRepository extends MongoRepository<Movie, ObjectId> {
 	 **/
 	@Query("{'imdbId': ?0}")
 	public Optional<Movie> findByImdbId(String movieId);
-
+	
+	@Query("{}")
+	public List<Movie>findFirstXMoviesAfterSkippingYMovies(Integer X, Integer Y);
 }
