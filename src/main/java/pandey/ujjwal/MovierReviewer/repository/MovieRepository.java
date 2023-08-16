@@ -14,7 +14,7 @@ import pandey.ujjwal.MovierReviewer.pojo.Movie;
 public interface MovieRepository extends MongoRepository<Movie, ObjectId> {
 	@Query("{'title': { $regex: ?0, $options: 'i' }}")
 	List<Movie> findAllMovieByNameContaining(String name);
-
+	
 	/*
 	 Auto Queries with properties name, (no need of @Query())
 	 @Query: indicates that the method will use a custom query for data retrieval
@@ -23,7 +23,4 @@ public interface MovieRepository extends MongoRepository<Movie, ObjectId> {
 	 **/
 	@Query("{'imdbId': ?0}")
 	public Optional<Movie> findByImdbId(String movieId);
-	
-	@Query("{}")
-	public List<Movie>findFirstXMoviesAfterSkippingYMovies(Integer X, Integer Y);
-}
+	}

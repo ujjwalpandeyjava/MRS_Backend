@@ -1,6 +1,7 @@
 package pandey.ujjwal.MovierReviewer.controller;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.bson.types.ObjectId;
@@ -28,8 +29,8 @@ public class MovieController {
 	private MovieService movieServiceInter;
 
 	@GetMapping
-	public ResponseEntity<List<Movie>> findFirstXMoviesAfterSkippingYMovies(@RequestBody ObjectNode jsonObj) {
-		return new ResponseEntity<List<Movie>>(movieServiceInter.findFirstXMoviesAfterSkippingYMovies(jsonObj),
+	public ResponseEntity<Map<String, Object>> findFirstXMoviesAfterSkippingYMovies(@RequestBody ObjectNode jsonObj) {
+		return new ResponseEntity<Map<String, Object>>(movieServiceInter.findFirstXMoviesAfterSkippingYMovies(jsonObj),
 				HttpStatus.OK);
 	}
 
