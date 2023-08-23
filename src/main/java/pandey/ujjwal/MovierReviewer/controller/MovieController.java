@@ -1,5 +1,6 @@
 package pandey.ujjwal.MovierReviewer.controller;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -10,12 +11,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import pandey.ujjwal.MovierReviewer.pojo.Movie;
 import pandey.ujjwal.MovierReviewer.service.MovieService;
@@ -28,10 +26,20 @@ public class MovieController {
 	@Autowired
 	private MovieService movieServiceInter;
 
-	@GetMapping
-	public ResponseEntity<Map<String, Object>> findFirstXMoviesAfterSkippingYMovies(@RequestBody ObjectNode jsonObj) {
-		return new ResponseEntity<Map<String, Object>>(movieServiceInter.findFirstXMoviesAfterSkippingYMovies(jsonObj),
-				HttpStatus.OK);
+	@GetMapping(value = "")
+	public ResponseEntity<Map<String, Object>> findFirstXMoviesAfterSkippingYMovies(
+			@RequestParam(value = "page", defaultValue = "0") String page,
+			@RequestParam(value = "next", defaultValue = "5") String next) {
+		try {
+			Integer pageNo = Integer.parseInt(page);
+			Integer nextN = Integer.parseInt(next);
+			return new ResponseEntity<Map<String, Object>>(
+					movieServiceInter.findFirstXMoviesAfterSkippingYMovies(pageNo, nextN), HttpStatus.OK);
+		} catch (Exception e) {
+			var returnVal = new HashMap<String, Object>();
+			returnVal.put("error", "'page' and 'next' has to be a number");
+			return new ResponseEntity<Map<String, Object>>(returnVal, HttpStatus.CONFLICT);
+		}
 	}
 
 	@GetMapping(value = "/allMovies")
@@ -54,5 +62,4 @@ public class MovieController {
 		return new ResponseEntity<List<Movie>>(movieServiceInter.findAllMovieByNameContaining(nameContaining),
 				HttpStatus.OK);
 	}
-
 }
