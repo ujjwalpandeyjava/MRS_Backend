@@ -19,49 +19,41 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
-import pandey.ujjwal.MovierReviewer.pojo.RequestedTitle;
-import pandey.ujjwal.MovierReviewer.service.RequestService;
+import pandey.ujjwal.MovierReviewer.pojo.ContactForm;
+import pandey.ujjwal.MovierReviewer.service.ContactService;
 
 @RestController
-@RequestMapping(value = "/api/v1/request")
+@RequestMapping(value = "/api/v1/contact")
 @CrossOrigin(origins = { "http://localhost:3000", "http://localhost:8080" })
-public class RequestController {
-
+public class ContactController {
 	@Autowired
-	private RequestService requestServiceInter;
+	private ContactService contactService;
 
-	// We want para from user, check for default on movie controller
-	@PostMapping(value = "")
-	public ResponseEntity<RequestedTitle> addRequestTitle(@Valid @RequestBody RequestedTitle requestedBody)
+	@PostMapping(value = "addNewForm")
+	public ResponseEntity<ContactForm> addRequestTitle(@Valid @RequestBody ContactForm requestedBody)
 			throws MethodArgumentNotValidException, HttpMessageNotReadableException {
-		return new ResponseEntity<RequestedTitle>(requestServiceInter.saveNewRequest(requestedBody), HttpStatus.OK);
+		return new ResponseEntity<ContactForm>(contactService.saveNewForm(requestedBody), HttpStatus.OK);
 	}
 
-	// Class scoped
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
-	@ExceptionHandler({ MethodArgumentNotValidException.class, IOException.class })
-	public Map<String, String> handleValidationExceptions(Exception  ex) {
+	@ExceptionHandler({ HttpMessageNotReadableException.class, MethodArgumentNotValidException.class,
+			IOException.class })
+	public Map<String, String> handleValidationExceptions(Exception ex) {
 		Map<String, String> errors = new HashMap<>();
-		if (ex instanceof MethodArgumentNotValidException) {
+		if (ex instanceof HttpMessageNotReadableException) {
+//			HttpMessageNotReadableException ex1 = (HttpMessageNotReadableException) ex;
+			System.out.println("Inside no arg Request exception handling");
+			errors.put("Reason", "No body found, add data in body.");
+			return errors;
+		} else if (ex instanceof MethodArgumentNotValidException) {
 			MethodArgumentNotValidException ex1 = (MethodArgumentNotValidException) ex;
 			ex1.getBindingResult().getAllErrors().forEach((error) -> {
 				String fieldName = ((FieldError) error).getField();
 				String errorMessage = error.getDefaultMessage();
 				errors.put(fieldName, errorMessage);
+				errors.put("Error", "Need data to save");
 			});
-		} else if(ex instanceof IOException) {
-			IOException ex1 = (IOException) ex;			
-			errors.put("Message", "IO e");
 		}
-		return errors;
-	}
-
-	@ResponseStatus(HttpStatus.BAD_REQUEST)
-	@ExceptionHandler(HttpMessageNotReadableException.class)
-	public Map<String, String> handleNOArgFoundExceptions(HttpMessageNotReadableException ex) {
-		System.out.println("Inside no arg Request exception handling");
-		Map<String, String> errors = new HashMap<>();
-		errors.put("Reason", "No argument found, Title is must!");
 		return errors;
 	}
 }

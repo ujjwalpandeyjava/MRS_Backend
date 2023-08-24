@@ -7,7 +7,9 @@ import java.util.Optional;
 
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 
@@ -28,23 +30,14 @@ public class MovieImpl implements MovieService {
 	}
 
 	@Override
-	public Map<String, Object> findFirstXMoviesAfterSkippingYMovies(int page, int next) {
+	public Map<String, Object> latestXSkippingY(int page, int next) {
 		var returnValue = new HashMap<String, Object>();
 		returnValue.put("movies", null);
 		returnValue.put("moviesCount", 0);
-		returnValue.put("pages", 0);
-		System.out.println(page + "__" + next);
-
-		// How to use jackson
-		/*
-		 * Integer pageNo = 0; Integer nextN = 0; if (jsonObj.has("page") &&
-		 * jsonObj.get("page").canConvertToInt()) pageNo =
-		 * jsonObj.get("page").intValue(); if (jsonObj.has("next") &&
-		 * jsonObj.get("next").canConvertToInt()) nextN =
-		 * jsonObj.get("next").intValue();
-		 */
+		returnValue.put("possiblePages", 0);
 
 		Query query = new Query();
+		query.with(Sort.by(Sort.Direction.DESC, "_id")); // Latest
 		query.skip(page * next);
 		query.limit(next);
 
@@ -53,7 +46,7 @@ public class MovieImpl implements MovieService {
 		returnValue.replace("moviesCount", pagedMovies.size());
 
 		long count = mongoTemplate.count(new Query(), Movie.class);
-		returnValue.replace("pages", ((count / next) + (count % next == 0 ? 0 : 1)));
+		returnValue.replace("possiblePages", ((count / next) + (count % next == 0 ? 0 : 1)));
 		return returnValue;
 	}
 
@@ -70,5 +63,33 @@ public class MovieImpl implements MovieService {
 	@Override
 	public Optional<Movie> getOneMovieByImdbId(String imdbIdMovieId) {
 		return movieRepository.findByImdbId(imdbIdMovieId);
+	}
+
+	@Override
+	public Map<String, Object> findPagedMovieByNameContainingSkipXBeforeGetY(String nameContaining, int pageNo,
+			int rowInAPage) {
+		System.out.println("""
+				nameContaining: %s, pageNo: %s, rowInAPage: %s
+				""".formatted(nameContaining, pageNo, rowInAPage));
+
+		var returnValue = new HashMap<String, Object>();
+		returnValue.put("movies", null);
+		returnValue.put("moviesCount", 0);
+		returnValue.put("possiblePages", 0);
+
+		Query query = new Query();
+		// i=case-insensitive, remove field for case-sensitive
+		query.addCriteria(Criteria.where("title").regex(nameContaining, "i"));
+		query.skip(pageNo * rowInAPage);
+		query.limit(rowInAPage);
+
+		List<Movie> pagedMovies = mongoTemplate.find(query, Movie.class);
+		returnValue.replace("movies", pagedMovies);
+		returnValue.replace("moviesCount", pagedMovies.size());
+
+		long count = mongoTemplate.count(new Query(), Movie.class);
+		returnValue.replace("possiblePages", ((count / rowInAPage) + (count % rowInAPage == 0 ? 0 : 1)));
+		return returnValue;
+
 	}
 }

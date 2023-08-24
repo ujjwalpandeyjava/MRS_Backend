@@ -26,6 +26,11 @@ public class MovieController {
 	@Autowired
 	private MovieService movieServiceInter;
 
+	@GetMapping(value = "/allMovies")
+	public ResponseEntity<List<Movie>> getAllMovies() {
+		return new ResponseEntity<List<Movie>>(movieServiceInter.allMovies(), HttpStatus.OK);
+	}
+
 	@GetMapping(value = "")
 	public ResponseEntity<Map<String, Object>> findFirstXMoviesAfterSkippingYMovies(
 			@RequestParam(value = "page", defaultValue = "0") String page,
@@ -33,18 +38,13 @@ public class MovieController {
 		try {
 			Integer pageNo = Integer.parseInt(page);
 			Integer nextN = Integer.parseInt(next);
-			return new ResponseEntity<Map<String, Object>>(
-					movieServiceInter.findFirstXMoviesAfterSkippingYMovies(pageNo, nextN), HttpStatus.OK);
+			return new ResponseEntity<Map<String, Object>>(movieServiceInter.latestXSkippingY(pageNo, nextN),
+					HttpStatus.OK);
 		} catch (Exception e) {
 			var returnVal = new HashMap<String, Object>();
 			returnVal.put("error", "'page' and 'next' has to be a number");
 			return new ResponseEntity<Map<String, Object>>(returnVal, HttpStatus.CONFLICT);
 		}
-	}
-
-	@GetMapping(value = "/allMovies")
-	public ResponseEntity<List<Movie>> getAllMovies() {
-		return new ResponseEntity<List<Movie>>(movieServiceInter.allMovies(), HttpStatus.OK);
 	}
 
 	@GetMapping(value = "/movieId")
@@ -57,9 +57,33 @@ public class MovieController {
 		return new ResponseEntity<Optional<Movie>>(movieServiceInter.getOneMovieByImdbId(imdbID), HttpStatus.OK);
 	}
 
-	@GetMapping(value = "/nameContaining")
+	@GetMapping(value = "/allMoviesContaining")
 	public ResponseEntity<List<Movie>> getAllMoviescontaingName(@RequestParam("nameContaining") String nameContaining) {
+		System.out.println("nameContaining:" + nameContaining + ":");
 		return new ResponseEntity<List<Movie>>(movieServiceInter.findAllMovieByNameContaining(nameContaining),
 				HttpStatus.OK);
+	}
+
+	// Defult parameters to not throw error and similars.
+	// But we need for custom response.
+	@GetMapping(value = "/searchPagedMoviesContainingName")
+	public ResponseEntity<Map<String, Object>> getAllMoviescontaingName(
+			@RequestParam(value = "nameContaining", defaultValue = "") String nameContaining,
+			@RequestParam(value = "pageNo", defaultValue = "0") String pageNo,
+			@RequestParam(value = "rowInAPage", defaultValue = "3") String rowInAPage) {
+		System.out.println(nameContaining + "_" + pageNo + "_" + rowInAPage);
+		try {
+			Integer pageNo_ = Integer.parseInt(pageNo);
+			Integer rowInAPage_ = Integer.parseInt(rowInAPage);
+			return new ResponseEntity<Map<String, Object>>(movieServiceInter
+					.findPagedMovieByNameContainingSkipXBeforeGetY(nameContaining, pageNo_, rowInAPage_),
+					HttpStatus.OK);
+		} catch (Exception e) {
+			System.out.println(e.getClass());
+			var returnVal = new HashMap<String, Object>();
+			returnVal.put("error", "'page' and 'next' has to be a number");
+			return new ResponseEntity<Map<String, Object>>(returnVal, HttpStatus.CONFLICT);
+		}
+
 	}
 }

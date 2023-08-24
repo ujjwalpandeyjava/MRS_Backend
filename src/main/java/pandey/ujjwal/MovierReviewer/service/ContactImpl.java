@@ -4,15 +4,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Service;
 
-import pandey.ujjwal.MovierReviewer.pojo.RequestedTitle;
+import pandey.ujjwal.MovierReviewer.pojo.ContactForm;
 
 @Service
-public class RequestImpl implements RequestService {
-
+public class ContactImpl implements ContactService {
 	@Autowired
 	private MongoTemplate mongoTemplate;
 
-	public RequestedTitle saveNewRequest(RequestedTitle newToSave) {
-		return mongoTemplate.save(newToSave);
+	@Override
+	public ContactForm saveNewForm(ContactForm contactFormObj) {
+		return mongoTemplate.save(contactFormObj);
 	}
+
 }

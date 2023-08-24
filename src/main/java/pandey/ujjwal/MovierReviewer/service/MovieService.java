@@ -11,9 +11,12 @@ import pandey.ujjwal.MovierReviewer.pojo.Movie;
 public interface MovieService {
 	public List<Movie> allMovies();
 
-	public Map<String, Object> findFirstXMoviesAfterSkippingYMovies(int page, int next);
+	public Map<String, Object> latestXSkippingY(int page, int next);
 
 	public List<Movie> findAllMovieByNameContaining(String name);
+
+	public Map<String, Object> findPagedMovieByNameContainingSkipXBeforeGetY(String nameContaining, int pageNo,
+			int rowInAPage);
 
 	public Optional<Movie> getOneMovieById(ObjectId movieId);
 

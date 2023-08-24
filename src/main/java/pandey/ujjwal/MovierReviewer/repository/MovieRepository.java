@@ -20,6 +20,8 @@ public interface MovieRepository extends MongoRepository<Movie, ObjectId> {
 	 @Query: indicates that the method will use a custom query for data retrieval
 	 "{'imdbId': ?0}"MongoDB query expression itself
 	 ?0: parameter number
+	 
+	 We can use MongoTemplate also
 	 **/
 	@Query("{'imdbId': ?0}")
 	public Optional<Movie> findByImdbId(String movieId);
