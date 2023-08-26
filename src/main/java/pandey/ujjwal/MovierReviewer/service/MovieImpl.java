@@ -68,10 +68,6 @@ public class MovieImpl implements MovieService {
 	@Override
 	public Map<String, Object> findPagedMovieByNameContainingSkipXBeforeGetY(String nameContaining, int pageNo,
 			int rowInAPage) {
-		System.out.println("""
-				nameContaining: %s, pageNo: %s, rowInAPage: %s
-				""".formatted(nameContaining, pageNo, rowInAPage));
-
 		var returnValue = new HashMap<String, Object>();
 		returnValue.put("movies", null);
 		returnValue.put("moviesCount", 0);

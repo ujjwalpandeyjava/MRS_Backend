@@ -59,7 +59,6 @@ public class MovieController {
 
 	@GetMapping(value = "/allMoviesContaining")
 	public ResponseEntity<List<Movie>> getAllMoviescontaingName(@RequestParam("nameContaining") String nameContaining) {
-		System.out.println("nameContaining:" + nameContaining + ":");
 		return new ResponseEntity<List<Movie>>(movieServiceInter.findAllMovieByNameContaining(nameContaining),
 				HttpStatus.OK);
 	}
@@ -75,13 +74,17 @@ public class MovieController {
 		try {
 			Integer pageNo_ = Integer.parseInt(pageNo);
 			Integer rowInAPage_ = Integer.parseInt(rowInAPage);
-			return new ResponseEntity<Map<String, Object>>(movieServiceInter
-					.findPagedMovieByNameContainingSkipXBeforeGetY(nameContaining, pageNo_, rowInAPage_),
-					HttpStatus.OK);
+			if (rowInAPage_ < 0 || pageNo_ < 0) {
+				var returnVal = new HashMap<String, Object>();
+				returnVal.put("error", "'pageNo' and 'rowInAPage' has to be a positive number!");
+				return new ResponseEntity<Map<String, Object>>(returnVal, HttpStatus.FORBIDDEN);
+			} else
+				return new ResponseEntity<Map<String, Object>>(movieServiceInter
+						.findPagedMovieByNameContainingSkipXBeforeGetY(nameContaining, pageNo_, rowInAPage_),
+						HttpStatus.OK);
 		} catch (Exception e) {
-			System.out.println(e.getClass());
 			var returnVal = new HashMap<String, Object>();
-			returnVal.put("error", "'page' and 'next' has to be a number");
+			returnVal.put("error", "'pageNo' and 'rowInAPage' has to be a number");
 			return new ResponseEntity<Map<String, Object>>(returnVal, HttpStatus.CONFLICT);
 		}
 

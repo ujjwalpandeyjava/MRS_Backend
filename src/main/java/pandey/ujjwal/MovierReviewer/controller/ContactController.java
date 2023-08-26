@@ -42,7 +42,6 @@ public class ContactController {
 		Map<String, String> errors = new HashMap<>();
 		if (ex instanceof HttpMessageNotReadableException) {
 //			HttpMessageNotReadableException ex1 = (HttpMessageNotReadableException) ex;
-			System.out.println("Inside no arg Request exception handling");
 			errors.put("Reason", "No body found, add data in body.");
 			return errors;
 		} else if (ex instanceof MethodArgumentNotValidException) {

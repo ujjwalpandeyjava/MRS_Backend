@@ -59,7 +59,6 @@ public class RequestController {
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	@ExceptionHandler(HttpMessageNotReadableException.class)
 	public Map<String, String> handleNOArgFoundExceptions(HttpMessageNotReadableException ex) {
-		System.out.println("Inside no arg Request exception handling");
 		Map<String, String> errors = new HashMap<>();
 		errors.put("Reason", "No argument found, Title is must!");
 		return errors;
