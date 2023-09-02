@@ -7,6 +7,8 @@ import java.util.Optional;
 
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -29,6 +31,7 @@ public class MovieImpl implements MovieService {
 		return movieRepository.findAll();
 	}
 
+	// For home hero
 	@Override
 	public Map<String, Object> latestXSkippingY(int page, int next) {
 		var returnValue = new HashMap<String, Object>();
@@ -47,6 +50,9 @@ public class MovieImpl implements MovieService {
 
 		long count = mongoTemplate.count(new Query(), Movie.class);
 		returnValue.replace("possiblePages", ((count / next) + (count % next == 0 ? 0 : 1)));
+		Page<Movie> listPagingAndSortingRepositoryReturn = movieRepository.findByTitleContainingIgnoreCase("",
+				PageRequest.of(page-1, next));
+		returnValue.put("ListPagingAndSorting", listPagingAndSortingRepositoryReturn);
 		return returnValue;
 	}
 
@@ -65,6 +71,7 @@ public class MovieImpl implements MovieService {
 		return movieRepository.findByImdbId(imdbIdMovieId);
 	}
 
+	// For search
 	@Override
 	public Map<String, Object> findPagedMovieByNameContainingSkipXBeforeGetY(String nameContaining, int pageNo,
 			int rowInAPage) {

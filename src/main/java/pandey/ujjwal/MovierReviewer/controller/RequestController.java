@@ -40,7 +40,7 @@ public class RequestController {
 	// Class scoped
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	@ExceptionHandler({ MethodArgumentNotValidException.class, IOException.class })
-	public Map<String, String> handleValidationExceptions(Exception  ex) {
+	public Map<String, String> handleValidationExceptions(Exception ex) {
 		Map<String, String> errors = new HashMap<>();
 		if (ex instanceof MethodArgumentNotValidException) {
 			MethodArgumentNotValidException ex1 = (MethodArgumentNotValidException) ex;
@@ -49,9 +49,9 @@ public class RequestController {
 				String errorMessage = error.getDefaultMessage();
 				errors.put(fieldName, errorMessage);
 			});
-		} else if(ex instanceof IOException) {
-			IOException ex1 = (IOException) ex;			
-			errors.put("Message", "IO e");
+		} else if (ex instanceof IOException) {
+			IOException ex1 = (IOException) ex;
+			errors.put("Message", "IO e : " + ex1.getMessage());
 		}
 		return errors;
 	}
