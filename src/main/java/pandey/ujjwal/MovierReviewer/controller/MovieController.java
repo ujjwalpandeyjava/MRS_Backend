@@ -6,6 +6,8 @@ import java.util.Map;
 import java.util.Optional;
 
 import org.bson.types.ObjectId;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,21 +28,31 @@ public class MovieController {
 	@Autowired
 	private MovieService movieServiceInter;
 
+	private final Logger slf4jLogger = LoggerFactory.getLogger(MovieController.class);
+
 	@GetMapping(value = "/allMovies")
 	public ResponseEntity<List<Movie>> getAllMovies() {
-		return new ResponseEntity<List<Movie>>(movieServiceInter.allMovies(), HttpStatus.OK);
+		slf4jLogger.info("Inside the getAllMovies.");
+//		if (true)// Testing global exception handling
+//			throw new NullPointerException("Testing Global ExceptionHandling");
+//		return new ResponseEntity<List<Movie>>(movieServiceInter.allMovies(), HttpStatus.OK);
+		return ResponseEntity.status(HttpStatus.OK).body(movieServiceInter.allMovies());
 	}
 
 	@GetMapping(value = "")
 	public ResponseEntity<Map<String, Object>> findFirstXMoviesAfterSkippingYMovies(
 			@RequestParam(value = "page", defaultValue = "0") String page,
 			@RequestParam(value = "next", defaultValue = "5") String next) {
+		slf4jLogger.info("Inside the findFirstXMoviesAfterSkippingYMovies.");
+		System.out.printf("===> %s ,%s, ", page, next );
 		try {
 			Integer pageNo = Integer.parseInt(page);
 			Integer nextN = Integer.parseInt(next);
 			return new ResponseEntity<Map<String, Object>>(movieServiceInter.latestXSkippingY(pageNo, nextN),
 					HttpStatus.OK);
 		} catch (Exception e) {
+			slf4jLogger.error("Had error while parsing the values to int findFirstXMoviesAfterSkippingYMovies: "+ e.getMessage());
+			System.out.println(e.getMessage());
 			var returnVal = new HashMap<String, Object>();
 			returnVal.put("error", "'page' and 'next' has to be a number");
 			return new ResponseEntity<Map<String, Object>>(returnVal, HttpStatus.CONFLICT);

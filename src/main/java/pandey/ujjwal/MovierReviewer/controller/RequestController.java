@@ -38,8 +38,8 @@ public class RequestController {
 	}
 
 	// Class scoped
-	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	@ExceptionHandler({ MethodArgumentNotValidException.class, IOException.class })
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	public Map<String, String> handleValidationExceptions(Exception ex) {
 		Map<String, String> errors = new HashMap<>();
 		if (ex instanceof MethodArgumentNotValidException) {
@@ -56,8 +56,8 @@ public class RequestController {
 		return errors;
 	}
 
-	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	@ExceptionHandler(HttpMessageNotReadableException.class)
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	public Map<String, String> handleNOArgFoundExceptions(HttpMessageNotReadableException ex) {
 		Map<String, String> errors = new HashMap<>();
 		errors.put("Reason", "No argument found, Title is must!");

@@ -1,4 +1,4 @@
-package pandey.ujjwal.MovierReviewer.service;
+package pandey.ujjwal.MovierReviewer.service.impl;
 
 import java.util.HashMap;
 import java.util.List;
@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import pandey.ujjwal.MovierReviewer.pojo.Movie;
 import pandey.ujjwal.MovierReviewer.repository.MovieRepository;
+import pandey.ujjwal.MovierReviewer.service.MovieService;
 
 @Service
 public class MovieImpl implements MovieService {
@@ -43,7 +44,8 @@ public class MovieImpl implements MovieService {
 		query.with(Sort.by(Sort.Direction.DESC, "_id")); // Latest
 		query.skip(page * next);
 		query.limit(next);
-
+		System.out.println("==" + (page * next));
+		System.out.println(query);
 		List<Movie> pagedMovies = mongoTemplate.find(query, Movie.class);
 		returnValue.replace("movies", pagedMovies);
 		returnValue.replace("moviesCount", pagedMovies.size());
@@ -51,7 +53,7 @@ public class MovieImpl implements MovieService {
 		long count = mongoTemplate.count(new Query(), Movie.class);
 		returnValue.replace("possiblePages", ((count / next) + (count % next == 0 ? 0 : 1)));
 		Page<Movie> listPagingAndSortingRepositoryReturn = movieRepository.findByTitleContainingIgnoreCase("",
-				PageRequest.of(page-1, next));
+				PageRequest.of(page, next));
 		returnValue.put("ListPagingAndSorting", listPagingAndSortingRepositoryReturn);
 		return returnValue;
 	}
