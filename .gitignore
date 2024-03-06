@@ -33,3 +33,5 @@ build/
 
 ### ENV File ###
 .env
+/logs
+/bin

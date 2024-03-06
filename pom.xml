@@ -13,7 +13,7 @@
 	<artifactId>MovierReviewer</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>war</packaging>
-	<name>MovierReviewer</name>
+	<name>MRS_Backend</name>
 	<description>Full-Stack project with: Mongo, Java 21, SpringBoot3, ReactJS,
 		etc. (WAR)</description>
 	<properties>
@@ -26,6 +26,11 @@
 			<scope>runtime</scope>
 			<optional>true</optional>
 		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-actuator</artifactId>
+		</dependency>
+
 
 		<!-- View pages -->
 		<dependency>
