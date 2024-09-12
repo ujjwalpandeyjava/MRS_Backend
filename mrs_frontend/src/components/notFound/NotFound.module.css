@@ -1,0 +1,9 @@
+.notFound {
+	display: grid;
+	place-items: center;
+	height: 90vh;
+}
+
+.cat {
+	height: 60vh;
+}

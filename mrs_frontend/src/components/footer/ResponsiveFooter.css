@@ -1,0 +1,25 @@
+.footerForm {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: nowrap;
+	align-items: center;
+	justify-content: space-evenly;
+	margin-bottom: 1em;
+}
+
+.footerForm>.formEmail {
+	background-color: white;
+	color: black;
+	width: 50%;
+	min-width: 100px;
+	border-radius: 0.7em;
+	padding: 5px 10px;
+}
+
+.footerForm>input[type="submit"] {
+	background-color: rgb(90, 123, 243);
+	color: black;
+	min-width: 100px;
+	border-radius: 1em;
+	padding: 5px 10px;
+}

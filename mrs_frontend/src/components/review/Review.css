@@ -1,0 +1,20 @@
+.videoTitle {
+	font-size: 2em;
+	text-underline-offset: 4px;
+	text-decoration: underline;
+	text-decoration-color: #0081c580;
+	text-decoration-style: dotted;
+}
+
+.commentSection {
+	background-color: rgba(255, 255, 255, 0.1);
+	border: 1px dashed #ffffff4d;
+	border-radius: 5px;
+	padding: 5px;
+	padding-inline: 5px;
+	overflow: hidden;
+}
+
+.eachComment:not(:last-child) {
+	border-bottom: 1px dashed rgba(255, 255, 255, 0.25);
+}
